@@ -18,9 +18,17 @@ from utils import slugify, jinjago
 @click.option('--project-slug', prompt='Project slug',
               default=click.pass_context(lambda ctx: slugify(ctx.params['project_name'])),
               help='Project slug, used in paths, filenames, etc.')
+@click.option('--project-version', prompt='Project version',
+              default='1.0.0')
+@click.option('--project-description', prompt='Project description',
+              default='')
 @click.option('--force-delete', is_flag=True, default=False,
               help='Force delete the output directory')
-def scaffold(template_dir, output_dir, project_name, project_slug, force_delete):
+def scaffold(template_dir, output_dir,
+             project_name, project_slug,
+             project_version,
+             project_description,
+             force_delete):
     """
     \b
     TEMPLATE_DIR         Template directory [default: ./template]
@@ -39,6 +47,8 @@ def scaffold(template_dir, output_dir, project_name, project_slug, force_delete)
         'output_dir': output_dir,
         'project_name': project_name,
         'project_slug': project_slug,
+        'project_version': project_version,
+        'project_description': project_description,
     }
 
     if not os.path.exists(template_dir):
