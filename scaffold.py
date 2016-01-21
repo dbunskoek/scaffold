@@ -18,7 +18,9 @@ from utils import slugify, jinjago
 @click.option('--project-slug', prompt='Project slug',
               default=click.pass_context(lambda ctx: slugify(ctx.params['project_name'])),
               help='Project slug, used in paths, filenames, etc.')
-def scaffold(template_dir, output_dir, project_name, project_slug):
+@click.option('--force-delete', is_flag=True, default=False,
+              help='Force delete the output directory')
+def scaffold(template_dir, output_dir, project_name, project_slug, force_delete):
     """
     \b
     TEMPLATE_DIR         Template directory [default: ./template]
@@ -44,9 +46,10 @@ def scaffold(template_dir, output_dir, project_name, project_slug):
             'Template directory cannot be found: {template_dir}'.format(**context)
         )
 
-    # remove output directory - TODO: should be behind a flag
+    # remove output directory
     if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
+        if force_delete or click.confirm('The output directory will be deleted. Are you sure?', abort=True):
+            shutil.rmtree(output_dir)
 
     # copy directories and files
     for root, directories, filenames in list(os.walk(template_dir)):
