@@ -76,21 +76,16 @@ def scaffold(template_dir, output_dir,
             shutil.copy2(src, dst)
 
     # run all output files through jinja
-    env = jinja2.Environment(loader=jinja2.FileSystemLoader(output_dir))
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(output_dir),
+        keep_trailing_newline=True
+    )
     for root, directories, filenames in list(os.walk(output_dir)):
         for filename in filenames:
             output_file = os.path.join(root, filename)
-            # store if last character is newline
-            with open(output_file, 'r') as fh:
-                fh.seek(-1, os.SEEK_END)
-                last_character_is_newline = (fh.read() == '\n')
-                fh.close()
             template = env.get_template(output_file.replace(output_dir, '', 1))
             with open(output_file, 'wb') as fh:
                 fh.write(template.render(context))
-                # restore newline character, Jinja seems to lose it
-                if last_character_is_newline:
-                    fh.write('\n')
                 fh.close()
 
 
