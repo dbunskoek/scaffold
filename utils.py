@@ -10,8 +10,8 @@ def slugify(text):
     Remove characters that aren't alphanumerics, underscores, or hyphens.
     """
     text = normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
-    text = re.sub('[^\w\s-]', '', text).strip().lower()
-    text = re.sub('[-\s]+', '-', text)
+    text = re.sub(r'[^\w\s-]', '', text).strip().lower()
+    text = re.sub(r'[-\s]+', '-', text)
     return text
 
 

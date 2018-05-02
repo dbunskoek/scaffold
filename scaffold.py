@@ -90,4 +90,4 @@ def scaffold(template_dir, output_dir,
 
 
 if __name__ == '__main__':
-    scaffold()
+    scaffold()  # pylint: disable=no-value-for-parameter
